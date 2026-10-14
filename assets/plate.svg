@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 70" preserveAspectRatio="none">
+  <!-- Schild unter dem aktiven Charakter (Timer / Hinweis) -->
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0b5"/>
+      <stop offset=".3" stop-color="#d39d36"/>
+      <stop offset=".55" stop-color="#6e4b12"/>
+      <stop offset=".8" stop-color="#f0c865"/>
+      <stop offset="1" stop-color="#8d6219"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbe6"/>
+      <stop offset=".45" stop-color="#e9b247"/>
+      <stop offset=".55" stop-color="#8a5812"/>
+      <stop offset="1" stop-color="#f3c862"/>
+    </linearGradient>
+    <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c2620"/>
+      <stop offset="1" stop-color="#0c0a08"/>
+    </linearGradient>
+  </defs>
+  <path d="M46 8 H274 C 292 8, 300 22, 300 35 C 300 48, 292 62, 274 62 H46 C 28 62, 20 48, 20 35 C 20 22, 28 8, 46 8Z" fill="#0a0705"/>
+  <path d="M48 11 H272 C 288 11, 296 23, 296 35 C 296 47, 288 59, 272 59 H48 C 32 59, 24 47, 24 35 C 24 23, 32 11, 48 11Z" fill="url(#fill)" stroke="url(#g1)" stroke-width="3"/>
+  <path d="M52 16 H268" stroke="#fff3c0" stroke-opacity=".12" stroke-width="2"/>
+  <!-- Spitzen links/rechts -->
+  <g stroke="#3a2200" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M0 35 L18 27 L30 35 L18 43Z" fill="url(#g2)"/>
+    <path d="M320 35 L302 27 L290 35 L302 43Z" fill="url(#g2)"/>
+  </g>
+  <g fill="none" stroke="url(#g1)" stroke-width="2.4" stroke-linecap="round">
+    <path d="M30 18 C 22 12, 14 14, 12 20"/>
+    <path d="M30 52 C 22 58, 14 56, 12 50"/>
+    <path d="M290 18 C 298 12, 306 14, 308 20"/>
+    <path d="M290 52 C 298 58, 306 56, 308 50"/>
+  </g>
+</svg>

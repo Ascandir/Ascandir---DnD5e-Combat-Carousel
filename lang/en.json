@@ -1,0 +1,95 @@
+{
+  "ACC": {
+    "Round": "Round {round}",
+    "RoundShort": "R{round}",
+    "RoundStart": "Round {round} starts here",
+    "NextUp": "Next up",
+    "PrevTurn": "Previous turn",
+    "NextTurn": "Next turn",
+    "EndTurn": "End turn",
+    "Banner": {
+      "Next": "You're up next!"
+    },
+    "Timer": {
+      "Label": "Turn timer",
+      "PauseToggle": "Pause / resume turn timer",
+      "TurnOn": "Turn timer on",
+      "TurnOff": "Turn timer off"
+    },
+    "Image": {
+      "Title": "Carousel image",
+      "Hint": "Custom image for {name} in the combat carousel. Cut-out full-body art (PNG or WebP with a transparent background) looks best.",
+      "Pick": "Choose image",
+      "Reset": "Reset",
+      "Cancel": "Cancel"
+    },
+    "Settings": {
+      "TimerEnabled": {
+        "Name": "Enable turn timer",
+        "Hint": "Shows a countdown below the active character. Can also be toggled on the carousel via the small hourglass at the bottom right (GM only)."
+      },
+      "TimerSeconds": {
+        "Name": "Turn timer: seconds per turn",
+        "Hint": "How long a turn may take."
+      },
+      "TimerScope": {
+        "Name": "Turn timer applies to",
+        "Hint": "Whether the timer runs only for player characters or for NPCs too.",
+        "Players": "Player characters only",
+        "All": "All combatants"
+      },
+      "TimerExpire": {
+        "Name": "When the turn timer runs out",
+        "Hint": "Only show it, or end the turn automatically.",
+        "None": "Only show",
+        "Advance": "End turn automatically"
+      },
+      "AnnounceTurn": {
+        "Name": "Large turn announcement",
+        "Hint": "On every turn change, everyone briefly sees the text and the image of the character whose turn it is."
+      },
+      "AnnounceText": {
+        "Name": "Turn announcement text",
+        "Hint": "{name} is replaced with the name, e.g. \"{name}'s Turn\". If the name is hidden from players, ??? is shown."
+      },
+      "AllowPlayerMove": {
+        "Name": "Players may move the carousel",
+        "Hint": "If enabled, each player can move the carousel for themselves. Otherwise everyone uses the GM's position."
+      },
+      "MaxSlots": {
+        "Name": "Visible characters",
+        "Hint": "Maximum number of characters shown at once. With more combatants the carousel scrolls along."
+      },
+      "PrevCount": {
+        "Name": "Already acted (left)",
+        "Hint": "How many characters stay to the left of the active character."
+      },
+      "ImageSource": {
+        "Name": "Image source",
+        "Hint": "Which image is shown when no custom carousel image is set (right-click a figure in the carousel).",
+        "Portrait": "Character art (actor)",
+        "Token": "Token image"
+      },
+      "Show": {
+        "Name": "Show combat carousel",
+        "Hint": "Just for you: show or hide the carousel."
+      },
+      "ShowAnnounce": {
+        "Name": "Show large turn announcement",
+        "Hint": "Just for you: see the large announcement on turn changes (if the GM enabled it)."
+      },
+      "Scale": {
+        "Name": "Carousel size (%)",
+        "Hint": "Just for you: how large the carousel and the announcements are drawn."
+      },
+      "NextBanner": {
+        "Name": "\"You're up next\" notice",
+        "Hint": "Just for you: large notice when your character is next in line."
+      },
+      "Sound": {
+        "Name": "Notification sound",
+        "Hint": "Just for you: short sound with the \"You're up next\" notice."
+      }
+    }
+  }
+}

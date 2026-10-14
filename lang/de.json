@@ -1,0 +1,95 @@
+{
+  "ACC": {
+    "Round": "Runde {round}",
+    "RoundShort": "R{round}",
+    "RoundStart": "Ab hier: Runde {round}",
+    "NextUp": "Als Nächstes",
+    "PrevTurn": "Vorheriger Zug",
+    "NextTurn": "Nächster Zug",
+    "EndTurn": "Zug beenden",
+    "Banner": {
+      "Next": "Du bist als Nächstes dran!"
+    },
+    "Timer": {
+      "Label": "Zugtimer",
+      "PauseToggle": "Zugtimer anhalten / fortsetzen",
+      "TurnOn": "Zugtimer einschalten",
+      "TurnOff": "Zugtimer ausschalten"
+    },
+    "Image": {
+      "Title": "Karussell-Bild",
+      "Hint": "Eigenes Bild für {name} im Kampfkarussell. Am schönsten sind freigestellte Ganzkörperbilder (PNG oder WebP mit transparentem Hintergrund).",
+      "Pick": "Bild wählen",
+      "Reset": "Zurücksetzen",
+      "Cancel": "Abbrechen"
+    },
+    "Settings": {
+      "TimerEnabled": {
+        "Name": "Zugtimer aktivieren",
+        "Hint": "Zeigt unter dem aktiven Charakter einen Countdown. Lässt sich auch direkt am Karussell über die kleine Sanduhr rechts unten ein- und ausschalten (nur SL)."
+      },
+      "TimerSeconds": {
+        "Name": "Zugtimer: Sekunden pro Zug",
+        "Hint": "Wie lange ein Zug dauern darf."
+      },
+      "TimerScope": {
+        "Name": "Zugtimer gilt für",
+        "Hint": "Ob der Timer nur bei Spielercharakteren oder auch bei NSCs läuft.",
+        "Players": "Nur Spielercharaktere",
+        "All": "Alle Kämpfer"
+      },
+      "TimerExpire": {
+        "Name": "Wenn der Zugtimer abläuft",
+        "Hint": "Nur anzeigen oder den Zug automatisch beenden.",
+        "None": "Nur anzeigen",
+        "Advance": "Zug automatisch beenden"
+      },
+      "AnnounceTurn": {
+        "Name": "Große Zug-Anzeige",
+        "Hint": "Bei jedem Zugwechsel erscheint für alle kurz groß der Text und das Bild des Charakters, der jetzt dran ist."
+      },
+      "AnnounceText": {
+        "Name": "Text der Zug-Anzeige",
+        "Hint": "{name} wird durch den Namen ersetzt, z. B. \"{name}'s Turn\" oder \"{name} ist am Zug\". Ist der Name für Spieler verborgen, steht dort ???."
+      },
+      "AllowPlayerMove": {
+        "Name": "Spieler dürfen das Karussell verschieben",
+        "Hint": "Wenn aktiv, kann jeder Spieler das Karussell für sich selbst verschieben. Sonst gilt für alle die Position des SL."
+      },
+      "MaxSlots": {
+        "Name": "Sichtbare Charaktere",
+        "Hint": "Wie viele Charaktere das Karussell höchstens gleichzeitig zeigt. Bei mehr Kämpfern läuft es mit."
+      },
+      "PrevCount": {
+        "Name": "Bereits gehandelt (links)",
+        "Hint": "Wie viele Charaktere links vom aktiven Charakter stehen bleiben."
+      },
+      "ImageSource": {
+        "Name": "Bildquelle",
+        "Hint": "Welches Bild gezeigt wird, wenn kein eigenes Karussell-Bild hinterlegt ist (Rechtsklick auf eine Figur im Karussell).",
+        "Portrait": "Charakterbild (Akteur)",
+        "Token": "Token-Bild"
+      },
+      "Show": {
+        "Name": "Kampfkarussell anzeigen",
+        "Hint": "Nur für dich: das Karussell ein- oder ausblenden."
+      },
+      "ShowAnnounce": {
+        "Name": "Große Zug-Anzeige anzeigen",
+        "Hint": "Nur für dich: die große Anzeige beim Zugwechsel sehen (sofern der SL sie eingeschaltet hat)."
+      },
+      "Scale": {
+        "Name": "Größe des Karussells (%)",
+        "Hint": "Nur für dich: wie groß das Karussell und die großen Anzeigen dargestellt werden."
+      },
+      "NextBanner": {
+        "Name": "Hinweis „Du bist als Nächstes dran“",
+        "Hint": "Nur für dich: großer Hinweis, wenn dein Charakter als Nächstes an der Reihe ist."
+      },
+      "Sound": {
+        "Name": "Hinweiston",
+        "Hint": "Nur für dich: kurzer Ton beim Hinweis „Du bist als Nächstes dran“."
+      }
+    }
+  }
+}

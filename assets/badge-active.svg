@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 180">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6cc"/>
+      <stop offset=".25" stop-color="#ffcf5c"/>
+      <stop offset=".5" stop-color="#9a6213"/>
+      <stop offset=".75" stop-color="#ffd977"/>
+      <stop offset="1" stop-color="#b47a1d"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbe6"/>
+      <stop offset=".45" stop-color="#ffc94a"/>
+      <stop offset=".55" stop-color="#a86d14"/>
+      <stop offset="1" stop-color="#ffd35c"/>
+    </linearGradient>
+    <linearGradient id="wl" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#ffe9a0"/>
+      <stop offset=".6" stop-color="#d79a2c"/>
+      <stop offset="1" stop-color="#d79a2c" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffe9a0"/>
+      <stop offset=".6" stop-color="#d79a2c"/>
+      <stop offset="1" stop-color="#d79a2c" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="disc" cx=".45" cy=".35" r=".75">
+      <stop offset="0" stop-color="#2e2318"/>
+      <stop offset="1" stop-color="#0a0604"/>
+    </radialGradient>
+    <radialGradient id="halo" cx=".5" cy=".5" r=".5">
+      <stop offset=".55" stop-color="#ffb000" stop-opacity="0"/>
+      <stop offset=".72" stop-color="#ffc640" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ff9a00" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Leuchten -->
+  <circle cx="150" cy="90" r="74" fill="url(#halo)"/>
+  <!-- Schwingen entlang des Balkens -->
+  <path d="M96 84 L6 89 L6 91 L96 96Z" fill="url(#wl)"/>
+  <path d="M204 84 L294 89 L294 91 L204 96Z" fill="url(#wr)"/>
+  <path d="M100 78 C 84 80, 76 86, 70 90 C 76 94, 84 100, 100 102" fill="none" stroke="url(#g1)" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M200 78 C 216 80, 224 86, 230 90 C 224 94, 216 100, 200 102" fill="none" stroke="url(#g1)" stroke-width="3.4" stroke-linecap="round"/>
+  <!-- Ranken am Außenring -->
+  <g fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round">
+    <path d="M118 50 C 108 54, 104 62, 108 68"/>
+    <path d="M182 50 C 192 54, 196 62, 192 68"/>
+    <path d="M118 130 C 108 126, 104 118, 108 112"/>
+    <path d="M182 130 C 192 126, 196 118, 192 112"/>
+  </g>
+  <!-- Außenring -->
+  <circle cx="150" cy="90" r="52" fill="none" stroke="#2b1700" stroke-width="7"/>
+  <circle cx="150" cy="90" r="52" fill="none" stroke="url(#g2)" stroke-width="3.6"/>
+  <!-- Scheibe -->
+  <circle cx="150" cy="90" r="44" fill="#140a02"/>
+  <circle cx="150" cy="90" r="38" fill="url(#disc)"/>
+  <circle cx="150" cy="90" r="41" fill="none" stroke="url(#g1)" stroke-width="7"/>
+  <circle cx="150" cy="90" r="37.2" fill="none" stroke="#000" stroke-opacity=".7" stroke-width="1"/>
+  <circle cx="150" cy="90" r="44.6" fill="none" stroke="#fff3c0" stroke-opacity=".45" stroke-width="1"/>
+  <!-- Spitzen oben und unten -->
+  <g stroke="#4a2c00" stroke-width="1.3" stroke-linejoin="round">
+    <path d="M150 2 L157 24 L170 30 L157 35 L150 52 L143 35 L130 30 L143 24Z" fill="url(#g2)"/>
+    <path d="M150 178 L157 156 L170 150 L157 145 L150 128 L143 145 L130 150 L143 156Z" fill="url(#g2)"/>
+  </g>
+  <path d="M150 2 V52 M150 128 V178" stroke="#fff8d8" stroke-opacity=".7" stroke-width="1"/>
+  <!-- seitliche kleine Spitzen -->
+  <g fill="url(#g2)" stroke="#4a2c00" stroke-width="1">
+    <path d="M98 90 L106 84 L112 90 L106 96Z"/>
+    <path d="M202 90 L194 84 L188 90 L194 96Z"/>
+  </g>
+</svg>

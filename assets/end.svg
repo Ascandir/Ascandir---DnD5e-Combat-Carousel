@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <!-- Linkes Endstück; rechts per CSS gespiegelt. Balken-Mitte bei y=50 -->
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0b5"/>
+      <stop offset=".3" stop-color="#d39d36"/>
+      <stop offset=".55" stop-color="#6e4b12"/>
+      <stop offset=".8" stop-color="#f0c865"/>
+      <stop offset="1" stop-color="#8d6219"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbe6"/>
+      <stop offset=".45" stop-color="#e9b247"/>
+      <stop offset=".55" stop-color="#8a5812"/>
+      <stop offset="1" stop-color="#f3c862"/>
+    </linearGradient>
+    <linearGradient id="st" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".45" stop-color="#9ba1a9"/>
+      <stop offset=".55" stop-color="#3a3d42"/>
+      <stop offset="1" stop-color="#d4d8de"/>
+    </linearGradient>
+  </defs>
+  <!-- Speerspitze -->
+  <path d="M2 50 L60 41 L200 41 L200 59 L60 59Z" fill="#120d08" stroke="#0a0705" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M2 50 L60 42.5 L200 42.5" fill="none" stroke="url(#g1)" stroke-width="2"/>
+  <path d="M2 50 L60 57.5 L200 57.5" fill="none" stroke="url(#g1)" stroke-width="2"/>
+  <path d="M8 50 L44 45 L44 55Z" fill="url(#g1)"/>
+  <!-- Ranken -->
+  <g fill="none" stroke="url(#g1)" stroke-width="3" stroke-linecap="round">
+    <path d="M58 40 C 50 30, 38 30, 34 38"/>
+    <path d="M58 60 C 50 70, 38 70, 34 62"/>
+    <path d="M98 40 C 106 30, 118 30, 122 38"/>
+    <path d="M98 60 C 106 70, 118 70, 122 62"/>
+  </g>
+  <!-- großer Stern -->
+  <g transform="translate(78 50)">
+    <path d="M0-40 L8-10 L34 0 L8 10 L0 40 L-8 10 L-34 0 L-8-10Z" fill="url(#g2)" stroke="#3a2200" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M0-40 V40 M-34 0 H34" stroke="#fff8d8" stroke-opacity=".6" stroke-width="1"/>
+    <path d="M0-12 L6 0 L0 12 L-6 0Z" fill="url(#st)" stroke="#111" stroke-width=".8"/>
+  </g>
+  <!-- silberne Nebenspitzen -->
+  <g fill="url(#st)" stroke="#111" stroke-width=".8" stroke-linejoin="round">
+    <path d="M78 6 L82 14 L78 18 L74 14Z"/>
+    <path d="M78 94 L82 86 L78 82 L74 86Z"/>
+  </g>
+</svg>
