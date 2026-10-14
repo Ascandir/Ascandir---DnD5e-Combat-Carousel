@@ -30,33 +30,38 @@ Das Karussell nimmt das **Charakterbild** des Akteurs (oder das Token-Bild, eins
 
 ## Steuerung
 
-- **Verschieben:** Karussell anfassen und ziehen. Der SL legt die Position für alle fest. Darf ein Spieler verschieben (Einstellung), gilt seine Position nur für ihn.
+- **Verschieben:** Karussell anfassen und ziehen. Der SL legt die Anordnung für alle fest.
 - **Doppelklick** auf den Balken setzt die Position zurück (oben mittig, unter dem dnd5e-Kalender).
 - **Pfeile links/rechts:** SL – vorheriger/nächster Zug. Spieler – rechter Pfeil beendet den eigenen Zug.
-- **Große Anzeigen verschieben und skalieren:** *Moduleinstellungen → Große Anzeigen einrichten → Vorschau öffnen*. Die Vorschau bleibt stehen, bis du auf *Fertig* klickst.
-  - Ziehen am Bild verschiebt die ganze Anzeige (SL für alle; Spieler nur, wenn erlaubt – dann nur für sich).
-  - Ziehen am **Text** (blau umrandet) verschiebt nur den Text – so kannst du ihn frei ans Bild setzen. Der Versatz wächst mit, wenn du das Bild größer oder kleiner machst.
-  - **Horizontal zentrieren** setzt Text und Bild zusammen waagerecht in die Bildschirmmitte (die Höhe bleibt).
-  - **Textgröße und Bildgröße getrennt** über die zwei Regler oder per Mausrad: über dem Text ändert es die Textgröße, über dem Bild die Bildgröße.
-  - Das geht auch direkt während einer echten Anzeige im Kampf: Solange die Maus darauf liegt, bleibt sie stehen.
-  - Position und Größen gelten für beide Anzeigen („…'s Turn“ und „Du bist als Nächstes dran“).
+- **Große Anzeigen einrichten:** *Moduleinstellungen → Große Anzeigen einrichten → Vorschau öffnen*. Die Vorschau bleibt stehen, bis du auf *Fertig* klickst.
+  - Ziehen am Bild verschiebt die ganze Anzeige, Ziehen am **Text** (blau umrandet) nur den Text – so setzt du ihn frei ans Bild.
+  - **Horizontal zentrieren** setzt Text und Bild zusammen waagerecht in die Bildschirmmitte.
+  - **Textgröße und Bildgröße** (nur SL, gilt für alle): Regler oder Mausrad über Text bzw. Bild.
+  - Position und Größen gelten für beide Anzeigen („…'s Turn“ und „Du bist als Nächstes dran“) und für jeden Charakter.
 - **Kleine Sanduhr rechts unten** (nur SL): Zugtimer ein/aus.
 - **Timer-Schild** unter dem aktiven Charakter (nur SL): Klick hält den Timer an bzw. lässt ihn weiterlaufen. Pausiert das Spiel, steht der Timer ebenfalls.
 
-## Einstellungen
+## Was Spieler dürfen
+
+Alle Einstellungen macht der SL. Spieler können nur **verschieben**, und auch nur, wenn der SL *Spieler dürfen Karussell und große Anzeigen verschieben* einschaltet:
+
+- das Karussell ziehen,
+- die große Anzeige in der Vorschau anordnen (ganze Anzeige und Text zum Bild), Größen nicht.
+
+Die Anordnung eines Spielers hängt an **seinem Foundry-Benutzerkonto** – sie gilt also auf jedem Gerät, mit dem er sich anmeldet, und für jeden Charakter. Solange ein Spieler nichts verschoben hat, sieht er die Anordnung des SL. Mit *Zurücksetzen* kehrt er dazu zurück.
+
+Der SL kann in der Vorschau mit **Anordnung der Spieler zurücksetzen** alle eigenen Anordnungen löschen – dann gilt wieder bei allen seine. Ist das Verschieben für Spieler ausgeschaltet, gilt ohnehin bei allen die Anordnung des SL.
+
+## Einstellungen (nur SL)
 
 *Spieleinstellungen → Moduleinstellungen → Ascandir - DnD5e Combat Carousel*
 
-Nur SL:
 - Zugtimer aktivieren · Sekunden pro Zug · gilt für Spielercharaktere oder alle · bei Ablauf nur anzeigen oder Zug automatisch beenden
 - Große Zug-Anzeige ein/aus · Text der Zug-Anzeige (`{name}` = Name, Standard `{name}'s Turn`)
 - Spieler dürfen Karussell und große Anzeigen verschieben
 - Sichtbare Charaktere · wie viele links (bereits gehandelt) stehen bleiben
 - Bildquelle: Charakterbild oder Token-Bild
-
-Für jeden selbst:
-- Karussell anzeigen · Größe des Karussells in %
-- Große Zug-Anzeige anzeigen · Textgröße und Bildgröße der großen Anzeigen in % · Hinweis „Du bist als Nächstes dran“ · Hinweiston
+- Karussell anzeigen · Größe des Karussells · Text- und Bildgröße der großen Anzeigen · Hinweis „Du bist als Nächstes dran“ · Hinweiston
 
 ## Verträglichkeit
 

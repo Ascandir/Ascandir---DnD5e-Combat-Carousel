@@ -54,7 +54,7 @@
       },
       "AllowPlayerMove": {
         "Name": "Spieler dürfen Karussell und große Anzeigen verschieben",
-        "Hint": "Wenn aktiv, kann jeder Spieler das Karussell und die großen Anzeigen für sich selbst verschieben. Sonst gilt für alle die Position des SL."
+        "Hint": "Wenn aktiv, kann jeder Spieler das Karussell und die großen Anzeigen (auch Text zum Bild) für sich selbst anordnen. Die Anordnung hängt an seinem Benutzerkonto und gilt für alle Charaktere. Sonst gilt für alle die Anordnung des SL."
       },
       "MaxSlots": {
         "Name": "Sichtbare Charaktere",
@@ -72,47 +72,47 @@
       },
       "Show": {
         "Name": "Kampfkarussell anzeigen",
-        "Hint": "Nur für dich: das Karussell ein- oder ausblenden."
-      },
-      "ShowAnnounce": {
-        "Name": "Große Zug-Anzeige anzeigen",
-        "Hint": "Nur für dich: die große Anzeige beim Zugwechsel sehen (sofern der SL sie eingeschaltet hat)."
+        "Hint": "Karussell für alle ein- oder ausblenden."
       },
       "Scale": {
         "Name": "Größe des Karussells (%)",
-        "Hint": "Nur für dich: wie groß das Karussell dargestellt wird."
+        "Hint": "Wie groß das Karussell bei allen dargestellt wird."
       },
       "NextBanner": {
         "Name": "Hinweis „Du bist als Nächstes dran“",
-        "Hint": "Nur für dich: großer Hinweis, wenn dein Charakter als Nächstes an der Reihe ist."
+        "Hint": "Der Spieler, dessen Charakter als Nächstes an der Reihe ist, bekommt einen großen Hinweis."
       },
       "Sound": {
         "Name": "Hinweiston",
-        "Hint": "Nur für dich: kurzer Ton beim Hinweis „Du bist als Nächstes dran“."
+        "Hint": "Kurzer Ton beim Hinweis „Du bist als Nächstes dran“."
       },
       "AnnounceEditor": {
         "Name": "Große Anzeigen einrichten",
         "Label": "Vorschau öffnen",
-        "Hint": "Zeigt die große Zug-Anzeige als Vorschau. Dort verschieben (SL; Spieler nur, wenn erlaubt) und Text- und Bildgröße getrennt einstellen. Gilt auch für „Du bist als Nächstes dran“."
+        "Hint": "Zeigt die große Zug-Anzeige als Vorschau zum Verschieben und Einstellen. Spieler können sie nur öffnen, wenn das Verschieben erlaubt ist."
       },
       "AnnounceTextScale": {
         "Name": "Große Anzeigen: Textgröße (%)",
-        "Hint": "Nur für dich. Auch per Mausrad über dem Text einstellbar, während die Anzeige zu sehen ist."
+        "Hint": "Gilt für alle. Auch in der Vorschau (Große Anzeigen einrichten) per Regler oder Mausrad über dem Text einstellbar."
       },
       "AnnounceImageScale": {
         "Name": "Große Anzeigen: Bildgröße (%)",
-        "Hint": "Nur für dich. Auch per Mausrad über dem Bild einstellbar, während die Anzeige zu sehen ist."
+        "Hint": "Gilt für alle. Auch in der Vorschau per Regler oder Mausrad über dem Bild einstellbar."
       }
     },
     "Editor": {
       "Title": "Große Anzeige einrichten",
-      "Hint": "Bild ziehen verschiebt die ganze Anzeige · Text (blau umrandet) ziehen verschiebt nur den Text · Mausrad über Text bzw. Bild ändert dessen Größe",
-      "HintNoMove": "Mausrad über dem Text bzw. über dem Bild ändert dessen Größe. Verschieben darf nur der SL.",
+      "Hint": "Bild ziehen verschiebt die ganze Anzeige · Text (blau umrandet) ziehen verschiebt nur den Text · Mausrad über Text bzw. Bild ändert dessen Größe (gilt für alle)",
       "TextSize": "Textgröße",
       "ImageSize": "Bildgröße",
       "Reset": "Zurücksetzen",
       "Done": "Fertig",
-      "Center": "Horizontal zentrieren"
+      "Center": "Horizontal zentrieren",
+      "HintPlayer": "Bild ziehen verschiebt die ganze Anzeige · Text (blau umrandet) ziehen verschiebt nur den Text. Deine Anordnung gilt nur für dich, für alle Charaktere.",
+      "NotAllowed": "Der SL hat das Verschieben der großen Anzeigen nicht freigegeben.",
+      "ResetPlayers": "Anordnung der Spieler zurücksetzen",
+      "ResetPlayersHint": "Löscht die eigenen Anordnungen aller Spieler (Karussell und große Anzeigen). Danach gilt bei allen wieder deine Anordnung.",
+      "ResetPlayersDone": "Anordnungen der Spieler zurückgesetzt."
     }
   }
 }

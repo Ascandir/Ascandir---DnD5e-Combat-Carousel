@@ -516,3 +516,5 @@
   cursor: pointer;
 }
 .acc-edit-buttons button:hover { background: linear-gradient(#523b1f, #2a1e10); box-shadow: 0 0 8px rgba(255,190,60,.5); }
+.acc-edit-buttons.acc-edit-secondary { margin-top: 6px; }
+.acc-edit-buttons.acc-edit-secondary button { font-size: 13px; opacity: .85; }

@@ -67,38 +67,35 @@ function registerSettings() {
   });
   reg("position", { scope: "world", config: false, type: Object, default: {}, onChange: () => Carousel.applyPosition() });
 
-  // --- Pro Person ---
+  // --- Darstellung (ebenfalls nur SL, gilt für alle) ---
   reg("show", {
     name: "ACC.Settings.Show.Name", hint: "ACC.Settings.Show.Hint",
-    scope: "client", config: true, type: Boolean, default: true, onChange: rerender
+    scope: "world", config: true, type: Boolean, default: true, onChange: rerender
   });
   reg("scale", {
     name: "ACC.Settings.Scale.Name", hint: "ACC.Settings.Scale.Hint",
-    scope: "client", config: true, type: Number, range: { min: 50, max: 160, step: 5 }, default: 100, onChange: rerender
-  });
-  reg("nextBanner", {
-    name: "ACC.Settings.NextBanner.Name", hint: "ACC.Settings.NextBanner.Hint",
-    scope: "client", config: true, type: Boolean, default: true
-  });
-  reg("showAnnounce", {
-    name: "ACC.Settings.ShowAnnounce.Name", hint: "ACC.Settings.ShowAnnounce.Hint",
-    scope: "client", config: true, type: Boolean, default: true
-  });
-  reg("sound", {
-    name: "ACC.Settings.Sound.Name", hint: "ACC.Settings.Sound.Hint",
-    scope: "client", config: true, type: Boolean, default: true
+    scope: "world", config: true, type: Number, range: { min: 50, max: 160, step: 5 }, default: 100, onChange: rerender
   });
   reg("announceTextScale", {
     name: "ACC.Settings.AnnounceTextScale.Name", hint: "ACC.Settings.AnnounceTextScale.Hint",
-    scope: "client", config: true, type: Number, range: { min: 30, max: 250, step: 5 }, default: 100
+    scope: "world", config: true, type: Number, range: { min: 30, max: 250, step: 5 }, default: 100,
+    onChange: () => Banner.refreshScales()
   });
   reg("announceImageScale", {
     name: "ACC.Settings.AnnounceImageScale.Name", hint: "ACC.Settings.AnnounceImageScale.Hint",
-    scope: "client", config: true, type: Number, range: { min: 30, max: 250, step: 5 }, default: 100
+    scope: "world", config: true, type: Number, range: { min: 30, max: 250, step: 5 }, default: 100,
+    onChange: () => Banner.refreshScales()
   });
-  reg("playerPosition", { scope: "client", config: false, type: Object, default: {} });
+  reg("nextBanner", {
+    name: "ACC.Settings.NextBanner.Name", hint: "ACC.Settings.NextBanner.Hint",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+  reg("sound", {
+    name: "ACC.Settings.Sound.Name", hint: "ACC.Settings.Sound.Hint",
+    scope: "world", config: true, type: Boolean, default: true
+  });
   reg("announcePosition", { scope: "world", config: false, type: Object, default: {} });
-  reg("announcePlayerPosition", { scope: "client", config: false, type: Object, default: {} });
+  // Eigene Anordnung eines Spielers liegt als Flag an seinem Benutzerkonto (carouselPos, announceLayout).
 
   // Knopf in den Moduleinstellungen: Vorschau der großen Anzeige zum Verschieben/Skalieren
   const Base = foundry.applications?.api?.ApplicationV2;
@@ -106,6 +103,10 @@ function registerSettings() {
     class AnnounceEditMenu extends Base {
       static DEFAULT_OPTIONS = { id: "acc-announce-editor", window: { title: "ACC.Editor.Title" } };
       async render() {
+        if (!game.user.isGM && !setting("allowPlayerMove")) {
+          ui.notifications?.warn(T("Editor.NotAllowed"));
+          return this;
+        }
         Banner.openEditor();
         return this;
       }
@@ -590,7 +591,7 @@ const Carousel = {
     if (prev === null || prev === key || !combat) return;
     const current = combat.combatant;
     // 1) Große Zug-Anzeige für alle
-    if (current && setting("announceTurn") && setting("showAnnounce") && canSee(current)) {
+    if (current && setting("announceTurn") && canSee(current)) {
       const name = nameVisible(current) ? (current.token?.name ?? current.name) : "???";
       const text = String(setting("announceText") || "{name}'s Turn").replaceAll("{name}", name);
       Banner.queue({ kind: "turn", combatant: current, title: text });
@@ -607,7 +608,7 @@ const Carousel = {
 
   storedPosition() {
     if (!game.user.isGM && setting("allowPlayerMove")) {
-      const own = setting("playerPosition");
+      const own = game.user.getFlag(ID, "carouselPos");
       if (Number.isFinite(own?.x)) return own;
     }
     const world = setting("position");
@@ -640,12 +641,12 @@ const Carousel = {
     const r = this.root.getBoundingClientRect();
     const pos = { x: (r.left + r.width / 2) / window.innerWidth, y: r.top / window.innerHeight };
     if (game.user.isGM) await game.settings.set(ID, "position", pos);
-    else await game.settings.set(ID, "playerPosition", pos);
+    else if (setting("allowPlayerMove")) await game.user.setFlag(ID, "carouselPos", pos);
   },
 
   async resetPosition() {
     if (game.user.isGM) await game.settings.set(ID, "position", {});
-    else await game.settings.set(ID, "playerPosition", {});
+    else await game.user.unsetFlag(ID, "carouselPos");
     this.applyPosition();
   },
 
@@ -774,8 +775,8 @@ const Banner = {
   storedLayout() {
     const world = setting("announcePosition") ?? {};
     if (!game.user.isGM && setting("allowPlayerMove")) {
-      const own = setting("announcePlayerPosition") ?? {};
-      if (Object.keys(own).length) return { ...own };
+      const own = game.user.getFlag(ID, "announceLayout") ?? {};
+      if (Object.keys(own).length) return { ...world, ...own };
     }
     return { ...world };
   },
@@ -805,8 +806,8 @@ const Banner = {
     if (game.user.isGM) {
       await game.settings.set(ID, "announcePosition", { ...(setting("announcePosition") ?? {}), ...patch });
     } else if (setting("allowPlayerMove")) {
-      const base = Object.keys(setting("announcePlayerPosition") ?? {}).length ? setting("announcePlayerPosition") : (setting("announcePosition") ?? {});
-      await game.settings.set(ID, "announcePlayerPosition", { ...base, ...patch });
+      // Startet von der aktuellen Anordnung (eigene oder die des SL) und hängt am Benutzerkonto.
+      await game.user.setFlag(ID, "announceLayout", { ...this.storedLayout(), ...patch });
     }
   },
 
@@ -817,7 +818,31 @@ const Banner = {
 
   async resetPosition() {
     if (game.user.isGM) await game.settings.set(ID, "announcePosition", {});
-    else await game.settings.set(ID, "announcePlayerPosition", {});
+    else await game.user.unsetFlag(ID, "announceLayout");
+  },
+
+  /** SL: eigene Anordnungen aller Spieler löschen, damit wieder die des SL gilt. */
+  async resetPlayerLayouts() {
+    if (!game.user.isGM) return;
+    const Dialog = foundry.applications?.api?.DialogV2;
+    const ok = Dialog ? await Dialog.confirm({
+      window: { title: T("Editor.ResetPlayers") },
+      content: `<p>${escapeHTML(T("Editor.ResetPlayersHint"))}</p>`,
+      rejectClose: false
+    }).catch(() => false) : true;
+    if (!ok) return;
+    for (const u of game.users) {
+      if (u.isGM) continue;
+      const f = u.flags?.[ID] ?? {};
+      if (f.carouselPos) await u.unsetFlag(ID, "carouselPos");
+      if (f.announceLayout) await u.unsetFlag(ID, "announceLayout");
+    }
+    ui.notifications?.info(T("Editor.ResetPlayersDone"));
+  },
+
+  refreshScales() {
+    this.scales = {};
+    for (const el of document.querySelectorAll(".acc-announce")) this.applyScales(el);
   },
 
   build({ kind, src, title, sub }) {
@@ -892,6 +917,7 @@ const Banner = {
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
     el.addEventListener("wheel", (ev) => {
+      if (!game.user.isGM) return;
       ev.preventDefault();
       const part = ev.target.closest(".acc-announce-fig") ? "image" : "text";
       const cur = this.scale(part);
@@ -902,6 +928,7 @@ const Banner = {
   },
 
   setScale(part, value) {
+    if (!game.user.isGM) return;
     this.scales ??= {};
     this.scales[part] = value;
     for (const el of document.querySelectorAll(".acc-announce")) {
@@ -991,8 +1018,8 @@ const Banner = {
     panel.className = "acc-edit-panel";
     panel.innerHTML = `
       <div class="acc-edit-title">${escapeHTML(T("Editor.Title"))}</div>
-      <div class="acc-edit-hint">${escapeHTML(this.canMove ? T("Editor.Hint") : T("Editor.HintNoMove"))}</div>
-      ${["text", "image"].map((part) => `
+      <div class="acc-edit-hint">${escapeHTML(game.user.isGM ? T("Editor.Hint") : T("Editor.HintPlayer"))}</div>
+      ${!game.user.isGM ? "" : ["text", "image"].map((part) => `
       <label class="acc-edit-row" data-part="${part}"><span class="acc-edit-label">${escapeHTML(T(part === "text" ? "Editor.TextSize" : "Editor.ImageSize"))}</span>
         <input type="range" min="30" max="250" step="5" value="${this.scale(part)}">
         <span class="acc-edit-val">${this.scale(part)} %</span>
@@ -1001,7 +1028,8 @@ const Banner = {
         ${this.canMove ? `<button type="button" data-act="center"><i class="fa-solid fa-arrows-left-right-to-line"></i> ${escapeHTML(T("Editor.Center"))}</button>` : ""}
         <button type="button" data-act="reset"><i class="fa-solid fa-rotate-left"></i> ${escapeHTML(T("Editor.Reset"))}</button>
         <button type="button" data-act="done"><i class="fa-solid fa-check"></i> ${escapeHTML(T("Editor.Done"))}</button>
-      </div>`;
+      </div>
+      ${game.user.isGM ? `<div class="acc-edit-buttons acc-edit-secondary"><button type="button" data-act="players"><i class="fa-solid fa-users"></i> ${escapeHTML(T("Editor.ResetPlayers"))}</button></div>` : ""}`;
     document.body.append(panel);
     for (const row of panel.querySelectorAll("[data-part]")) {
       row.querySelector("input").addEventListener("input", (ev) => this.setScale(row.dataset.part, Number(ev.target.value)));
@@ -1010,12 +1038,15 @@ const Banner = {
       const act = ev.target.closest("button")?.dataset.act;
       if (act === "reset") {
         await this.resetPosition();
-        this.setScale("text", 100);
-        this.setScale("image", 100);
-        this.applyTextOffset(el, {});
+        if (game.user.isGM) {
+          this.setScale("text", 100);
+          this.setScale("image", 100);
+        }
+        this.applyTextOffset(el);
         this.place(el);
       }
       if (act === "center") await this.centerHorizontally(el);
+      if (act === "players") await this.resetPlayerLayouts();
       if (act === "done") this.closeEditor();
     });
     const onKey = (ev) => { if (ev.key === "Escape") this.closeEditor(); };
@@ -1093,6 +1124,11 @@ for (const hook of [
 ]) {
   Hooks.on(hook, () => Carousel.render());
 }
+
+Hooks.on("updateUser", (user) => {
+  if (user !== game.user) return;
+  Carousel.applyPosition();
+});
 
 Hooks.on("pauseGame", () => {
   const combat = activeCombat();

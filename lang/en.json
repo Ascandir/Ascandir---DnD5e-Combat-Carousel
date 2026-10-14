@@ -54,7 +54,7 @@
       },
       "AllowPlayerMove": {
         "Name": "Players may move the carousel and announcements",
-        "Hint": "If enabled, each player can move the carousel and the large announcements for themselves. Otherwise everyone uses the GM's position."
+        "Hint": "If enabled, each player can arrange the carousel and the large announcements (including text relative to the image) for themselves. The arrangement is stored on their user account and applies to every character. Otherwise everyone uses the GM's arrangement."
       },
       "MaxSlots": {
         "Name": "Visible characters",
@@ -72,47 +72,47 @@
       },
       "Show": {
         "Name": "Show combat carousel",
-        "Hint": "Just for you: show or hide the carousel."
-      },
-      "ShowAnnounce": {
-        "Name": "Show large turn announcement",
-        "Hint": "Just for you: see the large announcement on turn changes (if the GM enabled it)."
+        "Hint": "Show or hide the carousel for everyone."
       },
       "Scale": {
         "Name": "Carousel size (%)",
-        "Hint": "Just for you: how large the carousel is drawn."
+        "Hint": "How large the carousel is drawn for everyone."
       },
       "NextBanner": {
         "Name": "\"You're up next\" notice",
-        "Hint": "Just for you: large notice when your character is next in line."
+        "Hint": "The player whose character is next in line gets a large notice."
       },
       "Sound": {
         "Name": "Notification sound",
-        "Hint": "Just for you: short sound with the \"You're up next\" notice."
+        "Hint": "Short sound with the \"You're up next\" notice."
       },
       "AnnounceEditor": {
         "Name": "Set up large announcements",
         "Label": "Open preview",
-        "Hint": "Shows the large turn announcement as a preview. Move it there (GM; players only if allowed) and set text and image size separately. Also applies to \"You're up next\"."
+        "Hint": "Shows the large turn announcement as a preview to move and adjust. Players can only open it if moving is allowed."
       },
       "AnnounceTextScale": {
         "Name": "Large announcements: text size (%)",
-        "Hint": "Just for you. Can also be changed with the mouse wheel over the text while the announcement is visible."
+        "Hint": "Applies to everyone. Can also be set in the preview (Set up large announcements) with the slider or the mouse wheel over the text."
       },
       "AnnounceImageScale": {
         "Name": "Large announcements: image size (%)",
-        "Hint": "Just for you. Can also be changed with the mouse wheel over the image while the announcement is visible."
+        "Hint": "Applies to everyone. Can also be set in the preview with the slider or the mouse wheel over the image."
       }
     },
     "Editor": {
       "Title": "Set up large announcement",
-      "Hint": "Drag the image to move the whole announcement · drag the text (blue outline) to move only the text · mouse wheel over text or image changes its size",
-      "HintNoMove": "Mouse wheel over the text or the image changes its size. Only the GM may move it.",
+      "Hint": "Drag the image to move the whole announcement · drag the text (blue outline) to move only the text · mouse wheel over text or image changes its size (applies to everyone)",
       "TextSize": "Text size",
       "ImageSize": "Image size",
       "Reset": "Reset",
       "Done": "Done",
-      "Center": "Center horizontally"
+      "Center": "Center horizontally",
+      "HintPlayer": "Drag the image to move the whole announcement · drag the text (blue outline) to move only the text. Your arrangement applies only to you, for every character.",
+      "NotAllowed": "The GM has not allowed moving the large announcements.",
+      "ResetPlayers": "Reset players' arrangements",
+      "ResetPlayersHint": "Deletes every player's own arrangement (carousel and large announcements). Afterwards everyone uses your arrangement again.",
+      "ResetPlayersDone": "Players' arrangements reset."
     }
   }
 }
