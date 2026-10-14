@@ -106,7 +106,7 @@
     },
     "Editor": {
       "Title": "Große Anzeige einrichten",
-      "Hint": "Anzeige ziehen zum Verschieben · Mausrad über dem Text bzw. über dem Bild ändert dessen Größe",
+      "Hint": "Bild ziehen verschiebt die ganze Anzeige · Text (blau umrandet) ziehen verschiebt nur den Text · Mausrad über Text bzw. Bild ändert dessen Größe",
       "HintNoMove": "Mausrad über dem Text bzw. über dem Bild ändert dessen Größe. Verschieben darf nur der SL.",
       "TextSize": "Textgröße",
       "ImageSize": "Bildgröße",

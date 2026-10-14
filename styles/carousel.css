@@ -374,10 +374,13 @@
 }
 .acc-announce-text {
   --u: var(--ut);
+  position: relative;
+  z-index: 2;
+  left: calc(var(--uf) * var(--tx, 0));
+  top: calc(var(--uf) * var(--ty, 0) - var(--ut) * 1.4);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding-bottom: calc(var(--u) * 1.4);
   animation: acc-ann-text .7s cubic-bezier(.2,1,.3,1) both;
 }
 .acc-announce-title {
@@ -431,6 +434,7 @@
 .acc-announce-fig {
   --u: var(--uf);
   position: relative;
+  z-index: 1;
   height: calc(var(--u) * 9.5);
   width: calc(var(--u) * 6.6);
   animation: acc-ann-fig .8s cubic-bezier(.2,1,.3,1) both;
@@ -465,8 +469,15 @@
 }
 .acc-announce.acc-editing .acc-announce-text,
 .acc-announce.acc-editing .acc-announce-fig { animation: none; }
-.acc-announce.acc-editing .acc-announce-fig:hover,
-.acc-announce.acc-editing .acc-announce-text:hover { outline: 1px solid rgba(255,214,120,.45); outline-offset: 4px; }
+.acc-announce.acc-editing .acc-announce-fig:hover { outline: 1px solid rgba(255,214,120,.45); outline-offset: 4px; }
+.acc-announce.acc-editing .acc-announce-text {
+  cursor: move;
+  outline: 1px dashed rgba(170,215,255,.7);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+.acc-announce.acc-editing .acc-announce-text:hover { outline: 2px solid rgba(170,215,255,.9); background: rgba(170,215,255,.06); }
+.acc-announce.acc-dragging-text, .acc-announce.acc-dragging-text * { cursor: move !important; }
 
 .acc-edit-panel {
   position: fixed;

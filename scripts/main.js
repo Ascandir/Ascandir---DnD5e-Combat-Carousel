@@ -770,13 +770,24 @@ const Banner = {
     el.style.setProperty("--uf", `${(BASE_UNIT * this.scale("image") / 100).toFixed(1)}px`);
   },
 
-  storedPosition() {
+  /** Gespeichertes Layout: x/y = Mittelpunkt (Anteil am Bildschirm), tx/ty = Textversatz (in Bild-Einheiten). */
+  storedLayout() {
+    const world = setting("announcePosition") ?? {};
     if (!game.user.isGM && setting("allowPlayerMove")) {
-      const own = setting("announcePlayerPosition");
-      if (Number.isFinite(own?.x)) return own;
+      const own = setting("announcePlayerPosition") ?? {};
+      if (Object.keys(own).length) return { ...own };
     }
-    const world = setting("announcePosition");
-    return Number.isFinite(world?.x) ? world : null;
+    return { ...world };
+  },
+
+  storedPosition() {
+    const l = this.storedLayout();
+    return Number.isFinite(l.x) ? l : null;
+  },
+
+  applyTextOffset(el, l = this.storedLayout()) {
+    el.style.setProperty("--tx", String(Number.isFinite(l.tx) ? l.tx : 0));
+    el.style.setProperty("--ty", String(Number.isFinite(l.ty) ? l.ty : 0));
   },
 
   /** Mittelpunkt der Anzeige setzen und auf dem Bildschirm halten. */
@@ -790,11 +801,18 @@ const Banner = {
     el.style.top = `${cy}px`;
   },
 
+  async saveLayout(patch) {
+    if (game.user.isGM) {
+      await game.settings.set(ID, "announcePosition", { ...(setting("announcePosition") ?? {}), ...patch });
+    } else if (setting("allowPlayerMove")) {
+      const base = Object.keys(setting("announcePlayerPosition") ?? {}).length ? setting("announcePlayerPosition") : (setting("announcePosition") ?? {});
+      await game.settings.set(ID, "announcePlayerPosition", { ...base, ...patch });
+    }
+  },
+
   async savePosition(el) {
     const r = el.getBoundingClientRect();
-    const pos = { x: (r.left + r.width / 2) / window.innerWidth, y: (r.top + r.height / 2) / window.innerHeight };
-    if (game.user.isGM) await game.settings.set(ID, "announcePosition", pos);
-    else if (setting("allowPlayerMove")) await game.settings.set(ID, "announcePlayerPosition", pos);
+    await this.saveLayout({ x: (r.left + r.width / 2) / window.innerWidth, y: (r.top + r.height / 2) / window.innerHeight });
   },
 
   async resetPosition() {
@@ -810,6 +828,7 @@ const Banner = {
     const el = document.createElement("div");
     el.className = `acc-announce acc-${kind}`;
     this.applyScales(el);
+    this.applyTextOffset(el);
     el.innerHTML = `
       <div class="acc-announce-text">
         <div class="acc-announce-title">${escapeHTML(title)}</div>
@@ -828,7 +847,13 @@ const Banner = {
     el.addEventListener("pointerdown", (ev) => {
       if (ev.button !== 0 || ev.target.closest("button, input")) return;
       const r = el.getBoundingClientRect();
-      drag = { x: ev.clientX, y: ev.clientY, cx: r.left + r.width / 2, cy: r.top + r.height / 2, moved: false, id: ev.pointerId };
+      const textMode = !!(this.editor && ev.target.closest(".acc-announce-text"));
+      drag = {
+        x: ev.clientX, y: ev.clientY, cx: r.left + r.width / 2, cy: r.top + r.height / 2, moved: false, id: ev.pointerId,
+        text: textMode,
+        tx: parseFloat(el.style.getPropertyValue("--tx")) || 0,
+        ty: parseFloat(el.style.getPropertyValue("--ty")) || 0
+      };
     });
     const move = (ev) => {
       if (!drag || ev.pointerId !== drag.id) return;
@@ -836,8 +861,15 @@ const Banner = {
       if (!drag.moved) {
         if (Math.hypot(dx, dy) < 5 || !this.canMove) return;
         drag.moved = true;
-        el.classList.add("acc-dragging");
+        el.classList.add(drag.text ? "acc-dragging-text" : "acc-dragging");
         onDragStart?.();
+      }
+      if (drag.text) {
+        // Textversatz in Bild-Einheiten, damit er beim Skalieren des Bildes mitwandert
+        const uf = BASE_UNIT * this.scale("image") / 100;
+        el.style.setProperty("--tx", (drag.tx + dx / uf).toFixed(3));
+        el.style.setProperty("--ty", (drag.ty + dy / uf).toFixed(3));
+        return;
       }
       this.place(el, { x: (drag.cx + dx) / window.innerWidth, y: (drag.cy + dy) / window.innerHeight });
       this.dockPanel();
@@ -847,9 +879,14 @@ const Banner = {
       const d = drag;
       drag = null;
       if (!d.moved) return;
-      el.classList.remove("acc-dragging");
+      el.classList.remove("acc-dragging", "acc-dragging-text");
       el.addEventListener("click", (e) => e.stopPropagation(), { capture: true, once: true });
-      this.savePosition(el);
+      if (d.text) {
+        this.saveLayout({
+          tx: parseFloat(el.style.getPropertyValue("--tx")) || 0,
+          ty: parseFloat(el.style.getPropertyValue("--ty")) || 0
+        });
+      } else this.savePosition(el);
       onDragEnd?.();
     };
     window.addEventListener("pointermove", move);
@@ -974,6 +1011,7 @@ const Banner = {
         await this.resetPosition();
         this.setScale("text", 100);
         this.setScale("image", 100);
+        this.applyTextOffset(el, {});
         this.place(el);
       }
       if (act === "done") this.closeEditor();

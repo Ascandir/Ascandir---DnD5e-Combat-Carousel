@@ -106,7 +106,7 @@
     },
     "Editor": {
       "Title": "Set up large announcement",
-      "Hint": "Drag the announcement to move it · mouse wheel over the text or the image changes its size",
+      "Hint": "Drag the image to move the whole announcement · drag the text (blue outline) to move only the text · mouse wheel over text or image changes its size",
       "HintNoMove": "Mouse wheel over the text or the image changes its size. Only the GM may move it.",
       "TextSize": "Text size",
       "ImageSize": "Image size",
