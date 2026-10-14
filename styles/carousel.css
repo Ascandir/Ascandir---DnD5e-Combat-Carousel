@@ -356,7 +356,9 @@
 
 /* ---------- Große Anzeigen („<Name>'s Turn“ / „Als Nächstes“) – ohne Hintergrund ---------- */
 .acc-announce {
-  --u: 34px;
+  --ut: 38px;                 /* Textgröße */
+  --uf: 38px;                 /* Bildgröße */
+  --u: var(--ut);
   position: fixed;
   z-index: 99;
   left: 50%;
@@ -371,6 +373,7 @@
   font-family: "ACC Alegreya SC", "ACC Alegreya", serif;
 }
 .acc-announce-text {
+  --u: var(--ut);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -426,6 +429,7 @@
   filter: drop-shadow(0 0 calc(var(--u) * .2) rgba(255,190,60,.9));
 }
 .acc-announce-fig {
+  --u: var(--uf);
   position: relative;
   height: calc(var(--u) * 9.5);
   width: calc(var(--u) * 6.6);
@@ -450,3 +454,54 @@
 @keyframes acc-ann-text { from { opacity: 0; translate: calc(var(--u) * -2) 0; } to { opacity: 1; translate: 0 0; } }
 @keyframes acc-ann-fig  { from { opacity: 0; translate: calc(var(--u) * 2) 0; scale: .9; } to { opacity: 1; translate: 0 0; scale: 1; } }
 @keyframes acc-ann-out  { to { opacity: 0; translate: 0 calc(var(--u) * -.6); } }
+
+/* Verschieben / Einrichten */
+.acc-announce.acc-dragging { cursor: grabbing; }
+.acc-announce.acc-editing {
+  cursor: grab;
+  outline: 2px dashed rgba(255,214,120,.75);
+  outline-offset: 10px;
+  border-radius: 6px;
+}
+.acc-announce.acc-editing .acc-announce-text,
+.acc-announce.acc-editing .acc-announce-fig { animation: none; }
+.acc-announce.acc-editing .acc-announce-fig:hover,
+.acc-announce.acc-editing .acc-announce-text:hover { outline: 1px solid rgba(255,214,120,.45); outline-offset: 4px; }
+
+.acc-edit-panel {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  bottom: 90px;
+  transform: translateX(-50%);
+  min-width: 340px;
+  padding: 12px 16px 14px;
+  background: linear-gradient(#211911, #0c0906);
+  border: 2px solid #a8782c;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #000, 0 8px 24px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,230,170,.15);
+  color: #f0e2c0;
+  font-family: "ACC Alegreya", serif;
+  font-size: 15px;
+  pointer-events: auto;
+}
+.acc-edit-panel.acc-top { bottom: auto; top: 70px; }
+.acc-edit-title { font-family: "ACC Alegreya SC", serif; font-size: 19px; color: #ffe3a0; text-align: center; }
+.acc-edit-hint { margin: 2px 0 10px; font-size: 13px; color: #cdb98f; text-align: center; }
+.acc-edit-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+.acc-edit-label { width: 110px; }
+.acc-edit-row input[type=range] { flex: 1; accent-color: #e7b552; }
+.acc-edit-val { width: 52px; text-align: right; font-variant-numeric: tabular-nums; }
+.acc-edit-buttons { display: flex; gap: 8px; margin-top: 10px; }
+.acc-edit-buttons button {
+  flex: 1;
+  padding: 4px 10px;
+  background: linear-gradient(#3a2a17, #1c140b);
+  border: 1px solid #a8782c;
+  border-radius: 4px;
+  color: #ffe9b8;
+  font-family: "ACC Alegreya", serif;
+  font-size: 15px;
+  cursor: pointer;
+}
+.acc-edit-buttons button:hover { background: linear-gradient(#523b1f, #2a1e10); box-shadow: 0 0 8px rgba(255,190,60,.5); }

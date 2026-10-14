@@ -88,7 +88,37 @@ function registerSettings() {
     name: "ACC.Settings.Sound.Name", hint: "ACC.Settings.Sound.Hint",
     scope: "client", config: true, type: Boolean, default: true
   });
+  reg("announceTextScale", {
+    name: "ACC.Settings.AnnounceTextScale.Name", hint: "ACC.Settings.AnnounceTextScale.Hint",
+    scope: "client", config: true, type: Number, range: { min: 30, max: 250, step: 5 }, default: 100
+  });
+  reg("announceImageScale", {
+    name: "ACC.Settings.AnnounceImageScale.Name", hint: "ACC.Settings.AnnounceImageScale.Hint",
+    scope: "client", config: true, type: Number, range: { min: 30, max: 250, step: 5 }, default: 100
+  });
   reg("playerPosition", { scope: "client", config: false, type: Object, default: {} });
+  reg("announcePosition", { scope: "world", config: false, type: Object, default: {} });
+  reg("announcePlayerPosition", { scope: "client", config: false, type: Object, default: {} });
+
+  // Knopf in den Moduleinstellungen: Vorschau der großen Anzeige zum Verschieben/Skalieren
+  const Base = foundry.applications?.api?.ApplicationV2;
+  if (Base) {
+    class AnnounceEditMenu extends Base {
+      static DEFAULT_OPTIONS = { id: "acc-announce-editor", window: { title: "ACC.Editor.Title" } };
+      async render() {
+        Banner.openEditor();
+        return this;
+      }
+    }
+    game.settings.registerMenu(ID, "announceEditor", {
+      name: "ACC.Settings.AnnounceEditor.Name",
+      label: "ACC.Settings.AnnounceEditor.Label",
+      hint: "ACC.Settings.AnnounceEditor.Hint",
+      icon: "fa-solid fa-up-down-left-right",
+      type: AnnounceEditMenu,
+      restricted: false
+    });
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -721,10 +751,146 @@ const Carousel = {
 const Banner = {
   items: [],
   busy: false,
+  editor: null,
+
+  get canMove() {
+    return game.user.isGM || setting("allowPlayerMove");
+  },
+
+  scales: null,
+
+  /** Aktuelle Größen in %, inkl. noch nicht gespeicherter Mausrad-Schritte. */
+  scale(part) {
+    this.scales ??= {};
+    return this.scales[part] ?? setting(part === "text" ? "announceTextScale" : "announceImageScale");
+  },
+
+  applyScales(el) {
+    el.style.setProperty("--ut", `${(BASE_UNIT * this.scale("text") / 100).toFixed(1)}px`);
+    el.style.setProperty("--uf", `${(BASE_UNIT * this.scale("image") / 100).toFixed(1)}px`);
+  },
+
+  storedPosition() {
+    if (!game.user.isGM && setting("allowPlayerMove")) {
+      const own = setting("announcePlayerPosition");
+      if (Number.isFinite(own?.x)) return own;
+    }
+    const world = setting("announcePosition");
+    return Number.isFinite(world?.x) ? world : null;
+  },
+
+  /** Mittelpunkt der Anzeige setzen und auf dem Bildschirm halten. */
+  place(el, pos) {
+    const p = pos ?? this.storedPosition() ?? { x: 0.5, y: 0.48 };
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const w = el.offsetWidth || 600, h = el.offsetHeight || 300;
+    const cx = Math.min(Math.max(p.x * vw, Math.min(w / 2, vw / 2)), Math.max(vw - w / 2, vw / 2));
+    const cy = Math.min(Math.max(p.y * vh, Math.min(h / 2, vh / 2)), Math.max(vh - h / 2, vh / 2));
+    el.style.left = `${cx}px`;
+    el.style.top = `${cy}px`;
+  },
+
+  async savePosition(el) {
+    const r = el.getBoundingClientRect();
+    const pos = { x: (r.left + r.width / 2) / window.innerWidth, y: (r.top + r.height / 2) / window.innerHeight };
+    if (game.user.isGM) await game.settings.set(ID, "announcePosition", pos);
+    else if (setting("allowPlayerMove")) await game.settings.set(ID, "announcePlayerPosition", pos);
+  },
+
+  async resetPosition() {
+    if (game.user.isGM) await game.settings.set(ID, "announcePosition", {});
+    else await game.settings.set(ID, "announcePlayerPosition", {});
+  },
+
+  build({ kind, src, title, sub }) {
+    const cut = Cutout.get(src);
+    const media = isVideo(src)
+      ? `<video src="${escapeHTML(src)}" autoplay muted loop playsinline></video>`
+      : `<img src="${escapeHTML(src)}" alt="" draggable="false">`;
+    const el = document.createElement("div");
+    el.className = `acc-announce acc-${kind}`;
+    this.applyScales(el);
+    el.innerHTML = `
+      <div class="acc-announce-text">
+        <div class="acc-announce-title">${escapeHTML(title)}</div>
+        ${sub ? `<div class="acc-announce-sub">${escapeHTML(sub)}</div>` : ""}
+        <div class="acc-announce-line"><span style="background-image:url('${ASSET("star.svg")}')"></span></div>
+      </div>
+      <div class="acc-announce-fig ${cut === false ? "acc-framed" : "acc-cut"}">${media}</div>`;
+    document.body.append(el);
+    this.place(el);
+    return el;
+  },
+
+  /** Ziehen zum Verschieben, Mausrad zum Vergrößern/Verkleinern. */
+  makeInteractive(el, { onDragStart, onDragEnd } = {}) {
+    let drag = null;
+    el.addEventListener("pointerdown", (ev) => {
+      if (ev.button !== 0 || ev.target.closest("button, input")) return;
+      const r = el.getBoundingClientRect();
+      drag = { x: ev.clientX, y: ev.clientY, cx: r.left + r.width / 2, cy: r.top + r.height / 2, moved: false, id: ev.pointerId };
+    });
+    const move = (ev) => {
+      if (!drag || ev.pointerId !== drag.id) return;
+      const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
+      if (!drag.moved) {
+        if (Math.hypot(dx, dy) < 5 || !this.canMove) return;
+        drag.moved = true;
+        el.classList.add("acc-dragging");
+        onDragStart?.();
+      }
+      this.place(el, { x: (drag.cx + dx) / window.innerWidth, y: (drag.cy + dy) / window.innerHeight });
+      this.dockPanel();
+    };
+    const up = (ev) => {
+      if (!drag || ev.pointerId !== drag.id) return;
+      const d = drag;
+      drag = null;
+      if (!d.moved) return;
+      el.classList.remove("acc-dragging");
+      el.addEventListener("click", (e) => e.stopPropagation(), { capture: true, once: true });
+      this.savePosition(el);
+      onDragEnd?.();
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    el.addEventListener("wheel", (ev) => {
+      ev.preventDefault();
+      const part = ev.target.closest(".acc-announce-fig") ? "image" : "text";
+      const cur = this.scale(part);
+      const next = Math.min(250, Math.max(30, cur + (ev.deltaY < 0 ? 5 : -5)));
+      if (next !== cur) this.setScale(part, next);
+    }, { passive: false });
+    return () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); };
+  },
+
+  setScale(part, value) {
+    this.scales ??= {};
+    this.scales[part] = value;
+    for (const el of document.querySelectorAll(".acc-announce")) {
+      this.applyScales(el);
+      this.place(el, this.currentCenter(el));
+    }
+    const row = this.editor?.panel.querySelector(`[data-part="${part}"]`);
+    if (row) { row.querySelector("input").value = value; row.querySelector(".acc-edit-val").textContent = `${value} %`; }
+    const key = part === "text" ? "announceTextScale" : "announceImageScale";
+    clearTimeout(this._save?.[part]);
+    (this._save ??= {})[part] = setTimeout(async () => {
+      await game.settings.set(ID, key, value);
+      if (this.scales[part] === value) delete this.scales[part];
+    }, 300);
+  },
+
+  /** Mittelpunkt beibehalten, wenn sich die Größe ändert. */
+  currentCenter(el) {
+    const x = parseFloat(el.style.left), y = parseFloat(el.style.top);
+    if (!Number.isFinite(x)) return undefined;
+    return { x: x / window.innerWidth, y: y / window.innerHeight };
+  },
 
   /** Hinweise nacheinander zeigen, damit sich Zug-Anzeige und „Als Nächstes“ nicht überlagern. */
   queue(item) {
-    // Bei schnellen Zugwechseln veraltete Zug-Anzeigen verwerfen
+    if (this.editor) return;
     if (item.kind === "turn") this.items = this.items.filter((i) => i.kind !== "turn");
     this.items.push(item);
     if (!this.busy) this.nextItem();
@@ -740,34 +906,100 @@ const Banner = {
 
   play({ kind, combatant: c, title, sub, sound }) {
     return new Promise((resolve) => {
-      const src = imageOf(c);
-      const cut = Cutout.get(src);
-      const media = isVideo(src)
-        ? `<video src="${escapeHTML(src)}" autoplay muted loop playsinline></video>`
-        : `<img src="${escapeHTML(src)}" alt="">`;
-      const el = document.createElement("div");
-      el.className = `acc-announce acc-${kind}`;
-      el.style.setProperty("--u", `${unit()}px`);
-      el.innerHTML = `
-        <div class="acc-announce-text">
-          <div class="acc-announce-title">${escapeHTML(title)}</div>
-          ${sub ? `<div class="acc-announce-sub">${escapeHTML(sub)}</div>` : ""}
-          <div class="acc-announce-line"><span style="background-image:url('${ASSET("star.svg")}')"></span></div>
-        </div>
-        <div class="acc-announce-fig ${cut === false ? "acc-framed" : "acc-cut"}">${media}</div>`;
-      document.body.append(el);
+      const el = this.build({ kind, src: imageOf(c), title, sub });
       if (sound) playSound();
-      const hold = kind === "turn" ? 2600 : 3800;
-      let done = false;
+      let done = false, timer = null, dragging = false;
       const finish = () => {
         if (done) return;
         done = true;
+        clearTimeout(timer);
+        cleanup();
         el.classList.add("acc-out");
         setTimeout(() => { el.remove(); resolve(); }, 550);
       };
+      const arm = (ms) => { clearTimeout(timer); timer = setTimeout(finish, ms); };
+      // Solange die Maus darauf liegt oder gezogen wird, bleibt die Anzeige stehen.
+      el.addEventListener("pointerenter", () => clearTimeout(timer));
+      el.addEventListener("pointerleave", () => { if (!dragging) arm(1200); });
+      const cleanup = this.makeInteractive(el, {
+        onDragStart: () => { dragging = true; clearTimeout(timer); },
+        onDragEnd: () => { dragging = false; arm(1500); }
+      });
       el.addEventListener("click", finish);
-      setTimeout(finish, hold);
+      arm(kind === "turn" ? 2600 : 3800);
     });
+  },
+
+  /* ---------------- Einrichten: Vorschau, die stehen bleibt ---------------- */
+
+  sample() {
+    const c = game.combat?.combatant;
+    if (c) return { src: imageOf(c), name: nameVisible(c) ? (c.token?.name ?? c.name) : "???" };
+    const a = game.user.character ?? game.actors?.find?.((x) => x.isOwner && x.type === "character");
+    if (a) {
+      const custom = a.getFlag?.(ID, "image");
+      return { src: custom || a.img || ASSET("unknown.svg"), name: a.name };
+    }
+    return { src: ASSET("unknown.svg"), name: "Name" };
+  },
+
+  openEditor() {
+    if (this.editor) return;
+    const { src, name } = this.sample();
+    const title = String(setting("announceText") || "{name}'s Turn").replaceAll("{name}", name);
+    const el = this.build({ kind: "turn", src, title });
+    el.classList.add("acc-editing");
+    const cleanup = this.makeInteractive(el);
+    const panel = document.createElement("div");
+    panel.className = "acc-edit-panel";
+    panel.innerHTML = `
+      <div class="acc-edit-title">${escapeHTML(T("Editor.Title"))}</div>
+      <div class="acc-edit-hint">${escapeHTML(this.canMove ? T("Editor.Hint") : T("Editor.HintNoMove"))}</div>
+      ${["text", "image"].map((part) => `
+      <label class="acc-edit-row" data-part="${part}"><span class="acc-edit-label">${escapeHTML(T(part === "text" ? "Editor.TextSize" : "Editor.ImageSize"))}</span>
+        <input type="range" min="30" max="250" step="5" value="${this.scale(part)}">
+        <span class="acc-edit-val">${this.scale(part)} %</span>
+      </label>`).join("")}
+      <div class="acc-edit-buttons">
+        <button type="button" data-act="reset"><i class="fa-solid fa-rotate-left"></i> ${escapeHTML(T("Editor.Reset"))}</button>
+        <button type="button" data-act="done"><i class="fa-solid fa-check"></i> ${escapeHTML(T("Editor.Done"))}</button>
+      </div>`;
+    document.body.append(panel);
+    for (const row of panel.querySelectorAll("[data-part]")) {
+      row.querySelector("input").addEventListener("input", (ev) => this.setScale(row.dataset.part, Number(ev.target.value)));
+    }
+    panel.addEventListener("click", async (ev) => {
+      const act = ev.target.closest("button")?.dataset.act;
+      if (act === "reset") {
+        await this.resetPosition();
+        this.setScale("text", 100);
+        this.setScale("image", 100);
+        this.place(el);
+      }
+      if (act === "done") this.closeEditor();
+    });
+    const onKey = (ev) => { if (ev.key === "Escape") this.closeEditor(); };
+    window.addEventListener("keydown", onKey);
+    this.editor = { el, panel, cleanup, onKey };
+    this.dockPanel();
+  },
+
+  /** Einstellungsfeld oben oder unten, je nachdem wo die Vorschau gerade nicht ist. */
+  dockPanel() {
+    const ed = this.editor;
+    if (!ed) return;
+    const r = ed.el.getBoundingClientRect();
+    ed.panel.classList.toggle("acc-top", r.top + r.height / 2 > window.innerHeight * 0.5);
+  },
+
+  closeEditor() {
+    const ed = this.editor;
+    if (!ed) return;
+    this.editor = null;
+    ed.cleanup();
+    window.removeEventListener("keydown", ed.onKey);
+    ed.el.remove();
+    ed.panel.remove();
   }
 };
 
@@ -784,13 +1016,17 @@ Hooks.once("ready", () => {
   if (mod) mod.api = {
     render: () => Carousel.render(),
     resetPosition: () => Carousel.resetPosition(),
+    editAnnouncement: () => Banner.openEditor(),
     showTurn: () => {
       const c = game.combat?.combatant;
       if (c) Banner.queue({ kind: "turn", combatant: c, title: String(setting("announceText")).replaceAll("{name}", c.token?.name ?? c.name) });
     }
   };
   Carousel.render();
-  window.addEventListener("resize", () => Carousel.applyPosition());
+  window.addEventListener("resize", () => {
+    Carousel.applyPosition();
+    for (const el of document.querySelectorAll(".acc-announce")) Banner.place(el);
+  });
   // Der dnd5e-Kalender kann nachträglich erscheinen → Standardposition neu berechnen.
   Hooks.on("renderCalendarHUD", () => setTimeout(() => Carousel.applyPosition(), 50));
 });

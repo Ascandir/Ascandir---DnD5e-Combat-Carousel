@@ -53,8 +53,8 @@
         "Hint": "{name} is replaced with the name, e.g. \"{name}'s Turn\". If the name is hidden from players, ??? is shown."
       },
       "AllowPlayerMove": {
-        "Name": "Players may move the carousel",
-        "Hint": "If enabled, each player can move the carousel for themselves. Otherwise everyone uses the GM's position."
+        "Name": "Players may move the carousel and announcements",
+        "Hint": "If enabled, each player can move the carousel and the large announcements for themselves. Otherwise everyone uses the GM's position."
       },
       "MaxSlots": {
         "Name": "Visible characters",
@@ -80,7 +80,7 @@
       },
       "Scale": {
         "Name": "Carousel size (%)",
-        "Hint": "Just for you: how large the carousel and the announcements are drawn."
+        "Hint": "Just for you: how large the carousel is drawn."
       },
       "NextBanner": {
         "Name": "\"You're up next\" notice",
@@ -89,7 +89,29 @@
       "Sound": {
         "Name": "Notification sound",
         "Hint": "Just for you: short sound with the \"You're up next\" notice."
+      },
+      "AnnounceEditor": {
+        "Name": "Set up large announcements",
+        "Label": "Open preview",
+        "Hint": "Shows the large turn announcement as a preview. Move it there (GM; players only if allowed) and set text and image size separately. Also applies to \"You're up next\"."
+      },
+      "AnnounceTextScale": {
+        "Name": "Large announcements: text size (%)",
+        "Hint": "Just for you. Can also be changed with the mouse wheel over the text while the announcement is visible."
+      },
+      "AnnounceImageScale": {
+        "Name": "Large announcements: image size (%)",
+        "Hint": "Just for you. Can also be changed with the mouse wheel over the image while the announcement is visible."
       }
+    },
+    "Editor": {
+      "Title": "Set up large announcement",
+      "Hint": "Drag the announcement to move it · mouse wheel over the text or the image changes its size",
+      "HintNoMove": "Mouse wheel over the text or the image changes its size. Only the GM may move it.",
+      "TextSize": "Text size",
+      "ImageSize": "Image size",
+      "Reset": "Reset",
+      "Done": "Done"
     }
   }
 }

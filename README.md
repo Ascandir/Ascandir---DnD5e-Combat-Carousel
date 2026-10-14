@@ -33,6 +33,11 @@ Das Karussell nimmt das **Charakterbild** des Akteurs (oder das Token-Bild, eins
 - **Verschieben:** Karussell anfassen und ziehen. Der SL legt die Position für alle fest. Darf ein Spieler verschieben (Einstellung), gilt seine Position nur für ihn.
 - **Doppelklick** auf den Balken setzt die Position zurück (oben mittig, unter dem dnd5e-Kalender).
 - **Pfeile links/rechts:** SL – vorheriger/nächster Zug. Spieler – rechter Pfeil beendet den eigenen Zug.
+- **Große Anzeigen verschieben und skalieren:** *Moduleinstellungen → Große Anzeigen einrichten → Vorschau öffnen*. Die Vorschau bleibt stehen, bis du auf *Fertig* klickst.
+  - Ziehen verschiebt sie (SL für alle; Spieler nur, wenn erlaubt – dann nur für sich).
+  - **Textgröße und Bildgröße getrennt** über die zwei Regler oder per Mausrad: über dem Text ändert es die Textgröße, über dem Bild die Bildgröße.
+  - Das geht auch direkt während einer echten Anzeige im Kampf: Solange die Maus darauf liegt, bleibt sie stehen.
+  - Position und Größen gelten für beide Anzeigen („…'s Turn“ und „Du bist als Nächstes dran“).
 - **Kleine Sanduhr rechts unten** (nur SL): Zugtimer ein/aus.
 - **Timer-Schild** unter dem aktiven Charakter (nur SL): Klick hält den Timer an bzw. lässt ihn weiterlaufen. Pausiert das Spiel, steht der Timer ebenfalls.
 
@@ -43,12 +48,13 @@ Das Karussell nimmt das **Charakterbild** des Akteurs (oder das Token-Bild, eins
 Nur SL:
 - Zugtimer aktivieren · Sekunden pro Zug · gilt für Spielercharaktere oder alle · bei Ablauf nur anzeigen oder Zug automatisch beenden
 - Große Zug-Anzeige ein/aus · Text der Zug-Anzeige (`{name}` = Name, Standard `{name}'s Turn`)
-- Spieler dürfen das Karussell verschieben
+- Spieler dürfen Karussell und große Anzeigen verschieben
 - Sichtbare Charaktere · wie viele links (bereits gehandelt) stehen bleiben
 - Bildquelle: Charakterbild oder Token-Bild
 
 Für jeden selbst:
-- Karussell anzeigen · große Zug-Anzeige anzeigen · Größe in % · Hinweis „Du bist als Nächstes dran“ · Hinweiston
+- Karussell anzeigen · Größe des Karussells in %
+- Große Zug-Anzeige anzeigen · Textgröße und Bildgröße der großen Anzeigen in % · Hinweis „Du bist als Nächstes dran“ · Hinweiston
 
 ## Verträglichkeit
 
@@ -60,6 +66,7 @@ Das Karussell hängt sich nicht in die Foundry-Oberfläche oder in den Kalender 
 const api = game.modules.get("ascandir-dnd5e-combat-carousel").api;
 api.resetPosition();   // Position zurücksetzen
 api.showTurn();        // große Zug-Anzeige testen
+api.editAnnouncement(); // Vorschau zum Verschieben/Skalieren öffnen
 ```
 
 ## Lizenzen

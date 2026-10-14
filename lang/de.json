@@ -53,8 +53,8 @@
         "Hint": "{name} wird durch den Namen ersetzt, z. B. \"{name}'s Turn\" oder \"{name} ist am Zug\". Ist der Name für Spieler verborgen, steht dort ???."
       },
       "AllowPlayerMove": {
-        "Name": "Spieler dürfen das Karussell verschieben",
-        "Hint": "Wenn aktiv, kann jeder Spieler das Karussell für sich selbst verschieben. Sonst gilt für alle die Position des SL."
+        "Name": "Spieler dürfen Karussell und große Anzeigen verschieben",
+        "Hint": "Wenn aktiv, kann jeder Spieler das Karussell und die großen Anzeigen für sich selbst verschieben. Sonst gilt für alle die Position des SL."
       },
       "MaxSlots": {
         "Name": "Sichtbare Charaktere",
@@ -80,7 +80,7 @@
       },
       "Scale": {
         "Name": "Größe des Karussells (%)",
-        "Hint": "Nur für dich: wie groß das Karussell und die großen Anzeigen dargestellt werden."
+        "Hint": "Nur für dich: wie groß das Karussell dargestellt wird."
       },
       "NextBanner": {
         "Name": "Hinweis „Du bist als Nächstes dran“",
@@ -89,7 +89,29 @@
       "Sound": {
         "Name": "Hinweiston",
         "Hint": "Nur für dich: kurzer Ton beim Hinweis „Du bist als Nächstes dran“."
+      },
+      "AnnounceEditor": {
+        "Name": "Große Anzeigen einrichten",
+        "Label": "Vorschau öffnen",
+        "Hint": "Zeigt die große Zug-Anzeige als Vorschau. Dort verschieben (SL; Spieler nur, wenn erlaubt) und Text- und Bildgröße getrennt einstellen. Gilt auch für „Du bist als Nächstes dran“."
+      },
+      "AnnounceTextScale": {
+        "Name": "Große Anzeigen: Textgröße (%)",
+        "Hint": "Nur für dich. Auch per Mausrad über dem Text einstellbar, während die Anzeige zu sehen ist."
+      },
+      "AnnounceImageScale": {
+        "Name": "Große Anzeigen: Bildgröße (%)",
+        "Hint": "Nur für dich. Auch per Mausrad über dem Bild einstellbar, während die Anzeige zu sehen ist."
       }
+    },
+    "Editor": {
+      "Title": "Große Anzeige einrichten",
+      "Hint": "Anzeige ziehen zum Verschieben · Mausrad über dem Text bzw. über dem Bild ändert dessen Größe",
+      "HintNoMove": "Mausrad über dem Text bzw. über dem Bild ändert dessen Größe. Verschieben darf nur der SL.",
+      "TextSize": "Textgröße",
+      "ImageSize": "Bildgröße",
+      "Reset": "Zurücksetzen",
+      "Done": "Fertig"
     }
   }
 }
