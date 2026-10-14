@@ -2,7 +2,7 @@
   "id": "ascandir-dnd5e-combat-carousel",
   "title": "Ascandir - DnD5e Combat Carousel",
   "description": "Kampfkarussell für D&D 5e: zeigt allen, wer dran ist, wer als Nächstes kommt und welche Initiative jeder hat – mit großer Zug-Anzeige, Hinweis „Du bist als Nächstes dran“ und optionalem Zugtimer.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "authors": [
     {
       "name": "Ascandir"

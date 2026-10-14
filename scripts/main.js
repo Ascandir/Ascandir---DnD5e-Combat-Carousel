@@ -998,6 +998,7 @@ const Banner = {
         <span class="acc-edit-val">${this.scale(part)} %</span>
       </label>`).join("")}
       <div class="acc-edit-buttons">
+        ${this.canMove ? `<button type="button" data-act="center"><i class="fa-solid fa-arrows-left-right-to-line"></i> ${escapeHTML(T("Editor.Center"))}</button>` : ""}
         <button type="button" data-act="reset"><i class="fa-solid fa-rotate-left"></i> ${escapeHTML(T("Editor.Reset"))}</button>
         <button type="button" data-act="done"><i class="fa-solid fa-check"></i> ${escapeHTML(T("Editor.Done"))}</button>
       </div>`;
@@ -1014,12 +1015,28 @@ const Banner = {
         this.applyTextOffset(el, {});
         this.place(el);
       }
+      if (act === "center") await this.centerHorizontally(el);
       if (act === "done") this.closeEditor();
     });
     const onKey = (ev) => { if (ev.key === "Escape") this.closeEditor(); };
     window.addEventListener("keydown", onKey);
     this.editor = { el, panel, cleanup, onKey };
     this.dockPanel();
+  },
+
+  /** Sichtbaren Inhalt (Text + Bild zusammen) waagerecht in die Bildschirmmitte setzen. */
+  async centerHorizontally(el) {
+    const parts = [...el.querySelectorAll(".acc-announce-text, .acc-announce-fig")].map((n) => n.getBoundingClientRect());
+    const left = Math.min(...parts.map((r) => r.left));
+    const right = Math.max(...parts.map((r) => r.right));
+    const shift = window.innerWidth / 2 - (left + right) / 2;
+    const box = el.getBoundingClientRect();
+    const cx = box.left + box.width / 2 + shift;
+    const cy = box.top + box.height / 2;
+    // ohne Begrenzung setzen, damit die Mitte exakt stimmt
+    el.style.left = `${cx}px`;
+    el.style.top = `${cy}px`;
+    await this.saveLayout({ x: cx / window.innerWidth, y: cy / window.innerHeight });
   },
 
   /** Einstellungsfeld oben oder unten, je nachdem wo die Vorschau gerade nicht ist. */

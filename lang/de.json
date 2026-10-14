@@ -111,7 +111,8 @@
       "TextSize": "Textgröße",
       "ImageSize": "Bildgröße",
       "Reset": "Zurücksetzen",
-      "Done": "Fertig"
+      "Done": "Fertig",
+      "Center": "Horizontal zentrieren"
     }
   }
 }

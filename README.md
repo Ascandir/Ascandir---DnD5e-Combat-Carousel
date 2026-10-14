@@ -36,6 +36,7 @@ Das Karussell nimmt das **Charakterbild** des Akteurs (oder das Token-Bild, eins
 - **Große Anzeigen verschieben und skalieren:** *Moduleinstellungen → Große Anzeigen einrichten → Vorschau öffnen*. Die Vorschau bleibt stehen, bis du auf *Fertig* klickst.
   - Ziehen am Bild verschiebt die ganze Anzeige (SL für alle; Spieler nur, wenn erlaubt – dann nur für sich).
   - Ziehen am **Text** (blau umrandet) verschiebt nur den Text – so kannst du ihn frei ans Bild setzen. Der Versatz wächst mit, wenn du das Bild größer oder kleiner machst.
+  - **Horizontal zentrieren** setzt Text und Bild zusammen waagerecht in die Bildschirmmitte (die Höhe bleibt).
   - **Textgröße und Bildgröße getrennt** über die zwei Regler oder per Mausrad: über dem Text ändert es die Textgröße, über dem Bild die Bildgröße.
   - Das geht auch direkt während einer echten Anzeige im Kampf: Solange die Maus darauf liegt, bleibt sie stehen.
   - Position und Größen gelten für beide Anzeigen („…'s Turn“ und „Du bist als Nächstes dran“).

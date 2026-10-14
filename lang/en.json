@@ -111,7 +111,8 @@
       "TextSize": "Text size",
       "ImageSize": "Image size",
       "Reset": "Reset",
-      "Done": "Done"
+      "Done": "Done",
+      "Center": "Center horizontally"
     }
   }
 }
