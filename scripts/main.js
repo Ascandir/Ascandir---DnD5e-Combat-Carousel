@@ -475,8 +475,11 @@ const Carousel = {
       }
     }
 
-    this.startTicker();
-    Timer.tick();
+    // Der 250-ms-Takt wird nur für den Zugtimer gebraucht
+    if (timerApplies(combat.combatant)) {
+      this.startTicker();
+      Timer.tick();
+    } else this.stopTicker();
   },
 
   fillDivider(el, item) {
@@ -1119,11 +1122,23 @@ Hooks.once("ready", () => {
 
 for (const hook of [
   "createCombat", "updateCombat", "deleteCombat", "combatStart", "combatTurnChange",
-  "createCombatant", "updateCombatant", "deleteCombatant", "canvasReady",
-  "updateToken", "updateActor"
+  "createCombatant", "updateCombatant", "deleteCombatant", "canvasReady"
 ]) {
   Hooks.on(hook, () => Carousel.render());
 }
+
+// Token- und Actor-Änderungen passieren ständig (Bewegung, Inventar, TP …). Neu zeichnen nur,
+// wenn die Figur im laufenden Kampf mitspielt – sonst ändert sich am Karussell nichts.
+Hooks.on("updateToken", (doc) => {
+  const combat = activeCombat();
+  if (combat?.combatants.some((c) => c.tokenId === doc.id && c.sceneId === doc.parent?.id)) Carousel.render();
+});
+Hooks.on("updateActor", (actor) => {
+  const combat = activeCombat();
+  if (!combat) return;
+  const tokenId = actor.isToken ? actor.token?.id : null;
+  if (combat.combatants.some((c) => c.actorId === actor.id || (tokenId && c.tokenId === tokenId))) Carousel.render();
+});
 
 Hooks.on("updateUser", (user) => {
   if (user !== game.user) return;
